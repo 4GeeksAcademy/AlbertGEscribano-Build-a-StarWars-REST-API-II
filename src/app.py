@@ -36,6 +36,17 @@ def sitemap():
 
 # ... (definiciones de las rutas para User)
 
+@app.route('/users', methods=['GET'])
+def get_all_users():
+    try:
+        users = User.query.all()
+        serialized_users = [user.serialize() for user in users]
+        return jsonify(users=serialized_users), 200
+
+    except Exception as e:
+        return jsonify({'error': 'Error retrieving users: ' + str(e)}), 500
+
+
 @app.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     user = User.query.get(user_id)
